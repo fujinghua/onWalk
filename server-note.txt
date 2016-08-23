@@ -1,0 +1,353 @@
+wamp3.0.4 64位https://sourceforge.net/projects/wampserver/files/WampServer%203/WampServer%203.0.0/wampserver3.0.4_x64_apache2.4.18_mysql5.7.11_php5.6.19-7.0.4.exe/download
+wamp3.0.4 32位https://sourceforge.net/projects/wampserver/files/WampServer%203/WampServer%203.0.0/wampserver3.0.4_x86_apache2.4.18_mysql5.7.11_php5.6.19-7.0.4.exe/download
+
+
+
+远程 cmd -> mstsc
+121.40.194.99
+administrator
+Misyou5096
+
+
+
+[Informational 1xx]
+100="Continue"
+101="Switching Protocols"
+
+[Successful 2xx]
+200="OK"
+201="Created"
+202="Accepted"
+203="Non-Authoritative Information"
+204="No Content"
+205="Reset Content"
+206="Partial Content"
+
+[Redirection 3xx]
+300="Multiple Choices"
+301="Moved Permanently"
+302="Found"
+303="See Other"
+304="Not Modified"
+305="Use Proxy"
+306="(Unused)"
+307="Temporary Redirect"
+
+[Client Error 4xx]
+400="Bad Request"
+401="Unauthorized"
+402="Payment Required"
+403="Forbidden"
+404="Not Found"
+405="Method Not Allowed"
+406="Not Acceptable"
+407="Proxy Authentication Required"
+408="Request Timeout"
+409="Conflict"
+410="Gone"
+411="Length Required"
+412="Precondition Failed"
+413="Request Entity Too Large"
+414="Request-URI Too Long"
+415="Unsupported Media Type"
+416="Requested Range Not Satisfiable"
+417="Expectation Failed"
+
+[Server Error 5xx]
+500="Internal Server Error"
+501="Not Implemented"
+502="Bad Gateway"
+503="Service Unavailable"
+504="Gateway Timeout"
+505="HTTP Version Not Supported"
+
+
+
+Apache 配置虚拟主机三种方式
+
+一、基于IP
+
+ 1. 假设服务器有个IP地址为192.168.1.10，使用ifconfig在同一个网络接口eth0上绑定3个IP：
+
+[root@localhost root]# ifconfig eth0:1 192.168.1.11
+[root@localhost root]# ifconfig eth0:2 192.168.1.12
+[root@localhost root]# ifconfig eth0:3 192.168.1.13
+ 2. 修改hosts文件，添加三个域名与之一一对应：
+
+192.168.1.11   www.test1.com
+192.168.1.12   www.test2.com
+192.168.1.13   www.test3.com
+ 3. 建立虚拟主机存放网页的根目录，如在/www目录下建立test1、test2、test3文件夹，其中分别存放1.html、2.html、3.html
+
+/www/test1/1.html
+/www/test2/2.html
+/www/test3/3.html
+ 4. 在httpd.conf中将附加配置文件httpd-vhosts.conf包含进来，接着在httpd-vhosts.conf中写入如下配置：
+
+
+复制代码
+<VirtualHost 192.168.1.11:80>
+　　ServerName www.test1.com
+　　DocumentRoot /www/test1/
+　　<Directory "/www/test1">
+ 　　　　Options Indexes FollowSymLinks
+　　　　 AllowOverride None
+　　　　 Order allow,deny
+　　 　　Allow From All
+ 　 </Directory>
+</VirtualHost>
+
+<VirtualHost 192.168.1.12:80>
+　　ServerName www.test1.com
+　　DocumentRoot /www/test2/
+　　<Directory "/www/test2">
+ 　　　　Options Indexes FollowSymLinks
+　　　　 AllowOverride None
+　　　　 Order allow,deny
+　　 　　Allow From All
+ 　 </Directory>
+</VirtualHost>
+
+<VirtualHost 192.168.1.13:80>
+　　ServerName www.test1.com
+　　DocumentRoot /www/test3/
+　　<Directory "/www/test3">
+ 　　　　Options Indexes FollowSymLinks
+　　　　 AllowOverride None
+　　　　 Order allow,deny
+　　 　　Allow From All
+ 　 </Directory>
+</VirtualHost>
+复制代码
+ 5. 大功告成，测试下每个虚拟主机，分别访问www.test1.com、www.test2.com、www.test3.com
+
+ 
+
+二、基于主机名
+
+ 1. 设置域名映射同一个IP，修改hosts：
+
+192.168.1.10  www.test1.com
+192.168.1.10  www.test2.com
+192.168.1.10  www.test3.com
+ 2. 跟上面一样，建立虚拟主机存放网页的根目录
+
+/www/test1/1.html
+/www/test2/2.html
+/www/test3/3.html
+ 3. 在httpd.conf中将附加配置文件httpd-vhosts.conf包含进来，接着在httpd-vhosts.conf中写入如下配置：
+ 
+
+　　为了使用基于域名的虚拟主机，必须指定服务器IP地址（和可能的端口）来使主机接受请求。可以用NameVirtualHost指令来进行配置。 如果服务器上所有的IP地址都会用到， 你可以用*作为NameVirtualHost的参数。在NameVirtualHost指令中指明IP地址并不会使服务器自动侦听那个IP地址。 这里设定的IP地址必须对应服务器上的一个网络接口。
+　　下一步就是为你建立的每个虚拟主机设定<VirtualHost>配置块，<VirtualHost>的参数与NameVirtualHost指令的参数是一样的。每个<VirtualHost>定义块中，至少都会有一个ServerName指令来指定伺服哪个主机和一个DocumentRoot指令来说明这个主机的内容存在于文件系统的什么地方。
+
+　　如果在现有的web服务器上增加虚拟主机，必须也为现存的主机建造一个<VirtualHost>定义块。其中ServerName和DocumentRoot所包含的内容应该与全局的保持一致，且要放在配置文件的最前面，扮演默认主机的角色。
+
+复制代码
+NameVirtualHost *:80
+<VirtualHost *:80>  
+　　ServerName *
+
+　　DocumentRoot /www/ 
+
+</VirtualHost>
+
+<VirtualHost *:80>
+
+　　ServerName www.test1.com
+
+　　DocumentRoot /www/test1/
+
+　　<Directory "/www/test1">
+
+　　　　Options Indexes FollowSymLinks
+
+　　　　AllowOverride None
+
+　　　　Order allow,deny
+
+　　　　Allow from all
+
+　　</Directory>
+
+</VirtualHost> 
+
+ 
+
+<VirtualHost *:80>
+
+　　ServerName www.test2.com
+
+　　DocumentRoot /www/test2/
+
+　　<Directory "/www/test2">
+
+　　　　Options Indexes FollowSymLinks
+
+　　　　AllowOverride None
+
+　　　　Order allow,deny
+
+　　　　Allow from all
+
+　　</Directory>
+
+</VirtualHost>
+<VirtualHost *:80>
+
+　　ServerName www.test3.com
+
+　　DocumentRoot /www/test3/
+
+　　<Directory "/www/test3">
+
+　　　　Options Indexes FollowSymLinks
+
+　　　　AllowOverride None
+
+　　　　Order allow,deny
+
+　　　　Allow from all
+
+　　</Directory>
+
+</VirtualHost>
+复制代码
+ 4. 大功告成，测试下每个虚拟主机，分别访问www.test1.com、www.test2.com、www.test3.com
+
+ 
+
+三、基于端口
+
+1.  修改配置文件
+　　将原来的
+
+　　 　Listen 80
+      改为
+    　　Listen 80
+   　　 Listen 8080
+
+
+2. 更改虚拟主机设置：
+
+复制代码
+<VirtualHost 192.168.1.10:80>
+    DocumentRoot /var/www/test1/
+    ServerName www.test1.com
+</VirtualHost>
+
+<VirtualHost 192.168.1.10:8080>
+    DocumentRoot /var/www/test2
+    ServerName www.test2.com
+</VirtualHost>
+复制代码
+
+
+Apache HTTP Server（简称Apache）是Apache软件基金会的一个开放源代码的网页服务器软件，可以在大多数电脑操作系统中运行，由于其跨平台和安全性。被广泛使用，是最流行的Web服务器软件之一，快速，可扩展性强，是 Apache http 服务器的特点。
+
+Apache HTTP Server 默认开启 HTTP 也就是 80 端口，并提供 HTTP 服务，但也可以通过创建证书和简单的配置，打开 HTTPS 用于安全连接，用于加密通讯，如果仅仅是为了加密通讯，则可以自己生成证书，也可向认证机构申请，本文将介绍自己生成证书。
+
+以下配置基于 Apache http 2.4.17 / 2.4.18 撰写。
+
+控制台进入 apache/bin 目录，运行 openssl 程序完成生成 key 的任务，需要以下几个步骤：
+
+# Generating RSA 算法生成 2048 bit Key
+openssl genrsa -out server.key 2048
+# 或者 des3 算法的 2048 bit Key, 任选一种
+openssl genrsa -des3 -out server.key 2048
+
+# 做一个 server.key 的备份(可选操作)
+openssl rsa -in server.key -out server.key.unsecure
+
+# 生成 RSA 私钥，需要填写一些信息
+# openssl req -new -key server.key -out server.csr
+openssl req -config ../conf/openssl.cnf -new -key server.key -out server.csr
+
+# 创建一个自签名的证书，需要填写一些信息
+# openssl req -new -x509 -nodes -sha1 -days 3650 -key server.key -out server.crt -extensions usr_cert
+openssl req -config ../conf/openssl.cnf -new -x509 -nodes -sha1 -days 3650 -key server.key -out server.crt -extensions usr_cert
+
+至此，证书制作完成，Apache https 安全配置需要两个文件，分别是 server.crt 和  server.key，将这两个文件拷贝到apache/conf 目录。
+
+编辑 httpd.conf 文件
+
+# 添加 443 侦听
+Listen 443
+
+# 打开 SSL 模块
+LoadModule ssl_module modules/mod_ssl.so
+
+# 虚拟主机设置，修改端口，并补充以下几项
+<VirtualHost *:443>
+   ...
+   ...
+  SSLEngine on
+  SSLCertificateFile         conf/server.crt
+  SSLCertificateKeyFile   conf/server.key
+</VirtualHost>
+
+重启服务器
+便可以通过 https://localhost 访问主机，见到类似下图的提示，便可确认 https 安全连接设置完成，且已经成功通过浏览器打开，而浏览器和服务器之间也将通过加密数据进行通讯。
+
+
+为调试程序，本机安装iis与apache，无法同时使用80端口，现给出解决方法：
+
+方法一：
+
+IIS5，多IP下共存，IIS为192.168.0.1，apache为192.168.0.2 原文地址
+c:\Inetpub\Adminscripts
+cscript adsutil.vbs set w3svc/disablesocketpooling true
+该命令反馈如下disablesocketpooling : (BOOLEAN) True
+重启IIS
+Inetpub\AdminScripts>cscript adsutil.vbs set w3svc/disablesocketpooling true
+由于 DisableSocketPooling 在 IIS 6.0 元数据库架构 (MBSchema.xml) 中被定义为有效属性，所以，您仍然可以使用 Adsutil.vbs 设置该属性，但这种设置不起作用。IIS 6.0 中的功能是新增的核心级别驱动程序 HTTP.sys 的一部分。要配置 HTTP.sys，您必须使用 Httpcfg.exe
+
+方法二：
+
+IIS6，多IP下共存，IIS为192.168.0.1，apache为192.168.0.2 原文地址
+到2003的CD下的 support/tools/Support.cab。解压出httpcfg.exe文件，COPY到windows/system32/目录下，用法自己看帮助
+
+命令行
+
+绑定到某IP： httpcfg set iplisten -i 192.168.0.1
+即命令使用IIS的只监听指定的IP及端口
+查看绑定： httpcfg query iplisten 
+删除绑定： httpcfg delete iplisten -i 192.168.0.1
+
+命令行
+net stop Apache2
+net stop iisadmin /y
+net START Apache2
+net START w3svc
+
+保证iis下的ip设置为全局默认，Apache中httpconf设置listen 192.168.0.2:80，就应该可以两个服务同时运行，相互不冲突了。
+IIS的访问地址为http://192.168.0.1，Apache访问地址为http://192.168.0.2
+
+方法三：
+
+网上常用的单IP共用80端口方法，不过不推荐，只是使用Apache的代理，速度有影响将apache设为使用80端口，IIS使用其它端口，比如81，然后将apache作为IIS的代理。
+
+在httpd.conf里面，取消下面四行的注释：
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_connect_module modules/mod_proxy_connect.so
+LoadModule proxy_http_module modules/mod_proxy_http.so
+LoadModule proxy_ftp_module modules/mod_proxy_ftp.so
+
+然后建立一个虚拟主机，将该域名的所有访问转向81端口。
+
+ServerName iloves.vicp.net
+ProxyPass / http://localhost:81/
+ProxyPassReverse / http://localhost:81/
+
+这样，对外就可以只需要一个端口，即可同时使用apache和IIS的功能了
+
+类推，使用第二种方法，你可以在IIS上配置PHP4，Apache2中配置PHP5，只需要IIS中安装PHP4，把php.ini复制到\windows目录即可，这个就不用说了吧，Apache2中，只要把PHP5的php.ini放在PHP5安装目录里面就行了
+
+配置Apache以支持PHP5：
+
+LoadModule php5_module "D:/PHPServer/PHP5/php5apache2.dll"
+AddType application/x-httpd-php .php
+DirectoryIndex index.html index.php
+PHPIniDir "D:/PHPServer/PHP5"
+
+其中最重要的一条就是 PHPIniDir，用来指明php.ini文件所在位置，即PHP5的安装目录，注意所有目录的应该改为D:/PHPServer/PHP5这种格式，而非D:\PHPServer\PHP5，IIS的访问地址为http://192.168.0.1，Apache访问地址为http://192.168.0.2

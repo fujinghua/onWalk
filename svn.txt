@@ -1,0 +1,224 @@
+ SVN服务器搭建--Subversio与TortoiseSVN的配置安装
+
+
+1、  Subversio和TortoiseSVN 简介
+Subversio简介：
+Subversion是一个自由，开源的版本控制系统，可以随意地免费下载、修改、以及重新发布。
+是一个通用系统，可以管理任何类型的文件。
+服务器运行方式：独立服务器和借助apache。
+存储版本数据方式：一种是在 Berkeley DB 数据库中存放数据。另一种是使用普通文件，采用自定义的格式来储存，称为 FSFS。
+Tortoisesvn简介：
+TortoiseSVN 是 Subversion 版本控制系统的一个免费开源客户端。
+其它详细介绍请百度谷歌。
+
+2、  Subversion服务器端下载
+Subversion下载地址：
+https://sourceforge.net/directory/os:windows/?q=setup-subversion
+
+ 
+我下载的是1.8.16版本：Setup-Subversion-1.6.0.msi
+3、  TortoiseSVN客户端下载和汉化语言包下载
+TortoiseSVN-1.9.4.27285-x64-svn-1.9.4.msi(我使用64位)
+下载地址：http://tortoisesvn.net/downloads.html
+
+ 
+TortoiseSVN汉化语言包下载：在同一页下面的地方。下载相对应版本的汉化包。如果版本不对应，是不能汉化成功的。
+LanguagePack_1.9.4.27285-x64-zh_CN.msi简体中文汉化包下载地址：
+https://tortoisesvn.net/downloads.html
+ 
+
+ 
+汉化结果图。
+
+ 
+ 
+
+4、  Subversion服务器端安装和TortoiseSVN客户端安装
+安装按照提示一直点下一步下一步即可。TortoiseSVN安装完成后，需要重启电脑。
+ 
+ 
+
+ 
+5、  建立仓库/版本库（Repository）
+运行Subversion服务器需要建立一个版本库（Repository），用来存放项目代码。
+ 
+两种方法建立版本库：
+1）、开始-à运行-à输入cmd-à打开了dos窗口，输入：
+svnadmin create D:/svnsites/yt_svn
+后面为你要建立的版本库路径。
+ 
+
+ 
+2）、使用TortoiseSVN工具创建：
+在你要创建版本库的路径D:/svnsites/yt_svn下，该路径下右键-àTortoiseSVN-àCreate Repository here...，然后就创建了一系列目录和文件。有的可以选择存储版本数据方式，这里默认是在 Berkeley DB 数据库中存放数据，看到下图那个db文件夹了嘛。
+注意：建立版本库的路径中的文件，文件名不能有空格，否则会建立不成功的。
+ 
+
+ 
+6、  配置用户和权限
+1）修改svnserve.conf文件
+打开C:/projectname/repository/conf目录下的svnserve.conf文件。
+原来配置：
+[general]
+# anon-access = read
+# auth-access = write
+# password-db=passwd
+修改成以下配置，去掉前面的#号：
+[general]
+anon-access=none        //未验证用户无任何权限
+auth-access=write      //已验证用户给予写权限
+password-db=passwd    //密码数据存放到passwd文件中
+解释：anon-access=none为未验证用户没有任何权限，如果这里不改，用户不用输入密码即可获得代码版本。
+auth-access=write已验证用户给予写权限。
+password-db=passwd将密码存到passwd文件中。
+2）修改passwd文件
+ 
+原来配置：    
+[users]
+#harry = harryssecret
+#sally = sallyssecret
+“=”号前面是用户名，后面是密码。按照这种格式建立自己的用户名和密码。
+[users]
+xinxin = 123456
+7、  启动服务器
+启动服务器的版本库，启动后，不要关闭dos窗口。
+开始à运行à输入cmdà输入svnserve -d -r D:/svnsites/yt_svn
+ 
+
+ 
+ 
+8、  导入/上传项目到服务器
+在C:/testproject这有一个项目，右键àTortoiseSVN->Import...
+在URL of repository输入“svn://127.0.0.1/testproject”，点确定上传。
+如果没有报错，数据就已经全部导入到了我们刚才定义的版本库中。
+ 
+
+ 
+输入用户名和密码，勾上保存认证，记住密码。
+ 
+
+9、  在客户端取出项目
+在安装了TortoiseSVN的客户端检出项目，将服务器端的项目代码下载到本地电脑上。
+你想在d:/myproject/xinxin目录检出项目，在该目录下右键->Checkout，在URL of repository中输入svn://127.0.0.1，IP地址为服务器的地址。这样就得到了一份工作拷贝。
+在工作拷贝中作出修改并提交：
+打开test.txt，作出修改，然后右键->Commit...，这样就把修改提交到了版本库。
+ 
+
+ 
+ 
+ 
+ 
+10、  注册系统服务，随电脑启动
+将服务器注册成系统服务，subversion就会随电脑启动了。
+系统启动
+sc create subversion_service binpath= "D:/Subversion/bin/svnserve.exe --service -r D:/svnsites/yt_svn" displayname= "Subversion Repository"
+depend= Tcpip start= auto
+解释：subversion_service为服务的名称。所有的系统服务可以在dos下通过命令手动启动和停止。启动：net start subversion_service 停止：net stop subversion_service
+binpath为安装subversion的路径，可执行文件的路径。
+      D:/svnsites/yt_svn为版本库的路径。
+displayname= "Subversion Repository"为注册成的系统服务显示名称，注册成功后，可以在系统服务中找到这个名称。
+depend= Tcpip为依赖Tcpip协议。
+start= auto为注册成的系统服务启动类型为自动。
+       注册系统服务成功图。
+      
+
+ 
+系统服务在哪看？
+       开始-à控制面板-à管理工具-à服务。
+       或右键我的电脑-à管理-à服务和应用程序-à服务。
+       下图为注册显示名为Subversion Repository的系统服务。
+      
+
+ 删除系统服务：
+ sc delete subversion_service
+ 删除系统服务成功图。
+
+
+
+
+Windows基于Apache的svn服务器配置
+  参照 http://bbs.iusesvn.com/thread-158-1-1.html文章，经过svn的洗刷，终于把它配置成功，现在把我所配置的方法，记录下来，以供其他有需要的朋友参考，需要改进的地方，请指教！
+一 环境
+
+　　操作系统：windows2003 server
+
+　　Apache版本：2.0.55 
+   subversion版本： Setup-Subversion-1.5.3.msi
+
+  　TortoiseSVN版本： TortoiseSVN-1.5.5.14361-win32-svn-1.5.4.msi
+
+二 安装步骤
+
+    1.安装Apache
+
+如果您已经拥有Apache的安装程序，那么你就可以双击安装程序开始安装。请确保你输入正确的服务器URL（如果你的服务器没有DNS名称，你可以直接输入IP地址）。我建议你将Apache安装成 for all Users,on Port 80,as a service。注意：如果你已经有一个IIS或者其它的程序使用80端口，安装可能会失败。如果是这样，你可以到程序目录下的Apache Group"Apache2"conf目录中找到文件httpd.conf，将其中的Listen 80改成一个不用的端口，比如Listen 81。然后重新运行这个安装程序，这次应该不会再有问题了。
+     测试Apache是否安装成功？
+你可以在你的浏览器中键入 http://loccalhost，如果呈现了一个已经配置好的网站，那么你的Apache就安装成功了。 
+    2.安装Subversion并配置
+
+   a，双击Subversion的安装程序来完成安装，安装完毕之后。我们进入subversion文件目录中（默认安装位置是：c:\Program Files\Subversion），  在该目录中的bin文件夹中找到httpd/mod_dav_svn.so、mod_authz_svn.so和libdb44.dll，将它们拷贝到Apache的modules目录（通常为c:\Program Files\Apache Group\Apache2\modules）下。
+
+   b，打开Apache的配置文件httd.conf(通常为c:\Program Files\Apache Group\Apache2\conf\httd.conf)，修改以下内容：
+
+复制代码
+#LoadModule dav_fs_module modules/mod_dav_fs.so
+#LoadModule dav_module modules/mod_dav.so
+
+修改为： 
+LoadModule dav_fs_module modules/mod_dav_fs.so
+
+LoadModule dav_module modules/mod_dav.so
+
+复制代码
+ 其实就是去掉这两行的注释。   
+
+ 然后在LoadModule节的最后添加以下两行：
+LoadModule dav_svn_module modules/mod_dav_svn.so
+LoadModule authz_svn_module modules/mod_authz_svn.so
+*注意： 这两行的代码顺序不能错，以免带来不必要的麻烦。 
+C, 然后在该文件最末进行相应的配置，以便客户端　TortoiseSVN和浏览器知道如何访问：
+
+复制代码
+<Location /svn>   #意味着可以通过像这样的URL(http://MyServer/svn)来访问Subversion版本库
+DAV svn     # 告诉Apache哪个模块负责服务像那样的URL－－在这里就是Subversion模块
+SVNParentPath C:\svn   #告诉Subversion在目录C:\svn下寻找版本库
+AuthType Basic  #启用基本的验证，使用用户名/密码验证
+AuthName "test"   # test为版本库
+AuthUserFile c:\svn\passwd   #passwd问密码和用户文件，用来验证用户的用户名及密码
+AuthzSVNAccessFile C:\svn\svnaccessfile    #权限控制文件，限定各个用户或组在版本库中目录的访问权限
+Require valid-user  #限定用户只有输入正确的用户名及密码后才能访问这个路径
+</Location>
+复制代码
+ d，下面，我们就来创建passwd文件，你打开命令行(DOS窗口)，将当前目录切换到apache2目录（通常为c:\Program Files\Apache Group\Apache2），然后打入以下命令以创建文件：
+
+bin\htpasswd -c passwd <username>
+
+比如： bin\htpasswd -c c:\svn\passwd admin
+命令分析：
+ c:\svn\passwd 表示会在:c:\svn目录下创建一个passwd文件
+ admin 表示用户名
+ 此命令执行Apahce的bin目录下的htpasswd.exe来创建一个密码文件，创建完成之后，重启Apache服务。
+
+ e，权限控制文件创建
+
+ 在c：\svn目录下创件svnaccessfile文件，然后打开进行配置，可以参照下面的示例：
+
+复制代码
+#组配置  组 = 用户名
+[groups]        
+@admin = admin
+@user = test  #test用户还需要按照上面d步骤来创建它和它的密码
+
+# 为所有库指定默认访问规则
+# 所有人可以读
+[/]
+* = r
+
+# 为test版本库制定权限
+#admin组拥有读写权限
+#user组只有读取权限
+[test:/svn/test]
+@admin = rw
+@user = r
+复制代码
+ 

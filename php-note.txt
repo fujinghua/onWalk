@@ -1,0 +1,347 @@
+----------------------------------华丽分割线------------------------------------------
+
+php中的扩展模块作用
+
+
+扩展库            说明                           注解 
+php_bz2.dll   bzip2  压缩函数库   无 
+php_calendar.dll  历法转换函数库    自 PHP 4.0.3 起内置 
+php_cpdf.dll   ClibPDF 函数库 无 
+php_crack.dll   密码破解函数库 无 
+php_ctype.dll   ctype 家族函数库 自 PHP 4.3.0 起内置 
+php_curl.dll   CURL，客户端 URL 库函数库 需要：libeay32.dll，ssleay32.dll（已附带） 
+php_cybercash.dll   网络现金支付函数库 PHP <= 4.2.0 
+php_db.dll   DBM 函数库 已废弃。用 DBA 替代之（php_dba.dll） 
+php_dba.dll   DBA：数据库（dbm 风格）抽象层函数库 无 
+php_dbase.dll   dBase 函数库 无 
+php_dbx.dll   dbx 函数库   
+php_domxml.dll   DOM XML 函数库 PHP <= 4.2.0 需要：libxml2.dll（已附带），PHP >= 4.3.0 需要：iconv.dll（已附带）  
+php_dotnet.dll   .NET 函数库 PHP <= 4.1.1 
+php_exif.dll   EXIF 函数库 需要 php_mbstring.dll。并且在 php.ini 中，php_exif.dll 必须在 php_mbstring.dll之后加载。  
+php_fbsql.dll   FrontBase 函数库 PHP <= 4.2.0 
+php_fdf.dll   FDF：表单数据格式化函数库 需要：fdftk.dll（已附带） 
+php_filepro.dll   filePro 函数库 只读访问 
+php_ftp.dll   FTP 函数库 自 PHP 4.0.3 起内置 
+php_gd.dll   GD 库图像函数库 在 PHP 4.3.2 中删除。此外注意在 GD1 中不能用真彩色函数，用 php_gd2.dll 替代。  
+php_gd2.dll   GD 库图像函数库 GD2 
+php_gettext.dll  Gettext 函数库 PHP <= 4.2.0 需要 gnu_gettext.dll（已附带），PHP >= 4.2.3 需要 libintl-1.dll，iconv.dll（已附带）。  
+php_hyperwave.dll  HyperWave 函数库 无 
+php_iconv.dll   ICONV 字符集转换 需要：iconv-1.3.dll（已附带），PHP >=4.2.1 需要 iconv.dll 
+php_ifx.dll   Informix 函数库 需要：Informix 库 
+php_iisfunc.dll   IIS 管理函数库 无 
+php_imap.dll   IMAP，POP3 和 NNTP 函数库 无 
+php_ingres.dll   Ingres II 函数库 需要：Ingres II 库 
+php_interbase.dll   InterBase functions 需要：gds32.dll（已附带） 
+php_java.dll   Java 函数库 PHP <= 4.0.6 需要：jvm.dll（已附带） 
+php_ldap.dll   LDAP 函数库 PHP <= 4.2.0 需要 libsasl.dll（已附带），PHP >= 4.3.0 需要 libeay32.dll，ssleay32.dll（已附带）  
+php_mbstring.dll   多字节字符串函数库 无 
+php_mcrypt.dll   Mcrypt 加密函数库 需要：libmcrypt.dll 
+php_mhash.dll   Mhash 函数库 PHP >= 4.3.0 需要：libmhash.dll（已附带） 
+php_mime_magic.dll   Mimetype 函数库 需要：magic.mime（已附带） 
+php_ming.dll   Ming 函数库（Flash） 无 
+php_msql.dll   mSQL 函数库 需要：msql.dll（已附带） 
+php_mssql.dll   MSSQL 函数库 需要：ntwdblib.dll（已附带） 
+php_mysql.dll   MySQL 函数库 PHP >= 5.0.0 需要 libmysql.dll（已附带） 
+php_mysqli.dll   MySQLi 函数库 PHP >= 5.0.0 需要 libmysql.dll（PHP <= 5.0.2 中是 libmysqli.dll）（已附带） 
+php_oci8.dll   Oracle 8 函数库 需要：Oracle 8.1+ 客户端库 
+php_openssl.dll   OpenSSL 函数库 需要：libeay32.dll（已附带） 
+php_oracle.dll   Oracle 函数库 需要：Oracle 7 客户端库 
+php_overload.dll   对象重载函数库 自 PHP 4.3.0 起内置 
+php_pdf.dll PDF   函数库 无 
+php_pgsql.dll   PostgreSQL 函数库 无 
+php_printer.dll   打印机函数库 无 
+php_shmop.dll   共享内存函数库 无 
+php_snmp.dll   SNMP 函数库 仅用于 Windows NT！ 
+php_soap.dll   SOAP 函数库 PHP >= 5.0.0 
+php_sockets.dll   Socket 函数库 无 
+php_sybase_ct.dll   Sybase 函数库 需要：Sybase 客户端库 
+php_tidy.dll   Tidy 函数库 PHP >= 5.0.0 
+php_tokenizer.dll   Tokenizer 函数库 自 PHP 4.3.0 起内置 
+php_w32api.dll   W32api 函数库 无 
+php_xmlrpc.dll   XML-RPC 函数库 PHP >= 4.2.1 需要 iconv.dll（已附带） 
+php_xslt.dll XSLT 函数库 PHP <= 4.2.0 需要 sablot.dll，expat.dll（已附带）。PHP >= 4.2.1 需要 sablot.dll，expat.dll，iconv.dll（已附带）。  
+php_yaz.dll YAZ 函数库 需要：yaz.dll（已附带） 
+php_zip.dll Zip 文件函数库 只读访问 
+php_zlib.dll ZLib 压缩函数库 自 PHP 4.3.0 起内置
+
+----------------------------------华丽分割线------------------------------------------
+
+运行环境：window 64 +appserv
+错误描述：Call to undefined function curl_init()
+解决方法：
+   1 、改c://window/php.ini文件，把extension=php_curl.dll前的分号去掉；
+   2、Win764位拷贝libeay32.dll、ssleay32.dll(C:\AppServ\php5\)两个文件到Windows目录下，其他的复制到windows/system32目录下；
+   3、重启apache。
+短彩信发送
+
+	$xml_data = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+	<TaskDataTransfer4EReq xmlns="http://www.aspirehld.com/iecp/TaskDataTransfer4EReq">
+	<eid> </eid>
+	<username> </username>
+	<password> </password>
+	<src> </src>
+	<destmsisdn>'.$pns.'</destmsisdn>
+	<content type="sms">
+		<title>'.$content.'</title>
+	</content>
+	</TaskDataTransfer4EReq>';
+	
+	$url = 'http://www.nowamagic.net/service/taskSubmit';//接收XML地址
+	
+	$header = "Content-type: text/xml";//定义content-type为xml
+	$ch = curl_init(); //初始化curl
+	curl_setopt($ch, CURLOPT_URL, $url);//设置链接
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//设置是否返回信息
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $header);//设置HTTP头
+	curl_setopt($ch, CURLOPT_POST, 1);//设置为POST方式
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_data);//POST数据
+	$response = curl_exec($ch);//接收返回信息
+	if(curl_errno($ch)){//出错则显示错误信息
+		print curl_error($ch);
+	}
+	curl_close($ch); //关闭curl链接
+	echo $response;//显示返回信息
+POST数据飞信接口
+
+$username = 13800138000;
+$password = 123456;
+$sendto = 13912345678;
+$message = "测试一个试试看！";
+
+$curlPost = 'username='.urlencode($username).'&
+password='.urlencode($password).'&
+sendto='.urlencode($sendto).'&
+message='.urlencode($message).'';
+
+$ch = curl_init();//初始化curl
+curl_setopt($ch,CURLOPT_URL,'http://sms.api.bz/fetion.php');//抓取指定网页
+curl_setopt($ch, CURLOPT_HEADER, 0);//设置header
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//要求结果为字符串且输出到屏幕上
+curl_setopt($ch, CURLOPT_POST, 1);//post提交方式
+curl_setopt($ch, CURLOPT_POSTFIELDS, $curlPost);
+$data = curl_exec($ch);//运行curl
+curl_close($ch);
+print_r($data);//输出结果
+飞信接口模式：http://sms.api.bz/fetion.php?username=您的移动飞信登录手机号，&password=您的移动飞信登录密码，&sendto=接收短信的飞信好友手机号，&message=短信内容。
+
+总结一下使用curl方法：
+
+初始化curl
+使用curl_setopt设置目标url，和其他选项
+curl_exec，执行curl
+执行后，关闭curl
+最后一步就是输出
+CERL 多线程
+
+curl一般用来抓取网页，第二种就是get或者post数据，第三种应用就是实现PHP的多线程任务。下面来实现多线程的：
+
+<?php
+/*
+curl 多线程抓取
+*/
+
+ /** 
+     * curl 多线程 
+     *  
+     * @param array $array 并行网址 
+     * @param int $timeout 超时时间
+     * @return array 
+     */ 
+ function Curl_http($array,$timeout){
+ 	$res = array();
+ 	$mh = curl_multi_init();//创建多个curl语柄
+	$startime = getmicrotime();
+ 	foreach($array as $k=>$url){
+ 		$conn[$k]=curl_init($url);
+ 		
+        curl_setopt($conn[$k], CURLOPT_TIMEOUT, $timeout);//设置超时时间
+        curl_setopt($conn[$k], CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; MSIE 5.01; Windows NT 5.0)');
+        curl_setopt($conn[$k], CURLOPT_MAXREDIRS, 7);//HTTp定向级别
+        curl_setopt($conn[$k], CURLOPT_HEADER, 0);//这里不要header，加块效率
+        curl_setopt($conn[$k], CURLOPT_FOLLOWLOCATION, 1); // 302 redirect
+        curl_setopt($conn[$k],CURLOPT_RETURNTRANSFER,1);
+        curl_multi_add_handle ($mh,$conn[$k]);
+ 	}
+	 //防止死循环耗死cpu 这段是根据网上的写法
+		do {
+			$mrc = curl_multi_exec($mh,$active);//当无数据，active=true
+		} while ($mrc == CURLM_CALL_MULTI_PERFORM);//当正在接受数据时
+		while ($active and $mrc == CURLM_OK) {//当无数据时或请求暂停时，active=true
+			if (curl_multi_select($mh) != -1) {
+				do {
+					$mrc = curl_multi_exec($mh, $active);
+				} while ($mrc == CURLM_CALL_MULTI_PERFORM);
+			}
+		}
+ 	
+ 	foreach ($array as $k => $url) {
+ 		  curl_error($conn[$k]);
+    	  $res[$k]=curl_multi_getcontent($conn[$k]);//获得返回信息
+    	  $header[$k]=curl_getinfo($conn[$k]);//返回头信息
+    	  curl_close($conn[$k]);//关闭语柄
+    	  curl_multi_remove_handle($mh  , $conn[$k]);   //释放资源  
+		}
+		
+		curl_multi_close($mh);
+		$endtime = getmicrotime();
+		$diff_time = $endtime - $startime;
+		
+		return array('diff_time'=>$diff_time,
+					 'return'=>$res,
+					'header'=>$header		
+					);
+ 	
+ }
+ //计算当前时间
+ function getmicrotime() {
+	    list($usec, $sec) = explode(" ",microtime());
+	    return ((float)$usec + (float)$sec);
+	}
+	
+	//测试一下，curl 三个网址
+	$array = array(
+				"http://www.weibo.com/",
+				"http://www.renren.com/",
+				"http://www.qq.com/"
+				);
+
+	$data = Curl_http($array,'10');//调用
+	var_dump($data);//输出
+	 
+?>
+因为$active要等全部url数据接受完毕才变成false，所以这里用到了curl_multi_exec的返回值判断是否还有数据，当有数据的时候就不停调用curl_multi_exec，暂时没有数据就进入select阶段，新数据一来就可以被唤醒继续执行。这里的好处就是CPU的无谓消耗没有了。
+
+这个多线程的写法步骤：
+
+调用curl_multi_init
+循环调用curl_multi_add_handle，这一步需要注意的是，curl_multi_add_handle的第二个参数是由curl_init而来的子handle。
+持续调用curl_multi_exec
+根据需要循环调用curl_multi_getcontent获取结果
+调用curl_multi_remove_handle，并为每个字handle调用curl_close
+调用curl_multi_close
+
+
+这个参数可能是以下常量之一:
+
+CURLINFO_EFFECTIVE_URL - 最后一个有效的URL地址
+CURLINFO_HTTP_CODE - 最后一个收到的HTTP代码
+CURLINFO_FILETIME - 远程获取文档的时间，如果无法获取，则返回值为“-1”
+CURLINFO_TOTAL_TIME - 最后一次传输所消耗的时间
+CURLINFO_NAMELOOKUP_TIME - 名称解析所消耗的时间
+CURLINFO_CONNECT_TIME - 建立连接所消耗的时间
+CURLINFO_PRETRANSFER_TIME - 从建立连接到准备传输所使用的时间
+CURLINFO_STARTTRANSFER_TIME - 从建立连接到传输开始所使用的时间
+CURLINFO_REDIRECT_TIME - 在事务传输开始前重定向所使用的时间
+CURLINFO_SIZE_UPLOAD - 上传数据量的总值
+CURLINFO_SIZE_DOWNLOAD - 下载数据量的总值
+CURLINFO_SPEED_DOWNLOAD - 平均下载速度
+CURLINFO_SPEED_UPLOAD - 平均上传速度
+CURLINFO_HEADER_SIZE - header部分的大小
+CURLINFO_HEADER_OUT - 发送请求的字符串
+CURLINFO_REQUEST_SIZE - 在HTTP请求中有问题的请求的大小
+CURLINFO_SSL_VERIFYRESULT - 通过设置CURLOPT_SSL_VERIFYPEER返回的SSL证书验证请求的结果
+CURLINFO_CONTENT_LENGTH_DOWNLOAD - 从Content-Length: field中读取的下载内容长度
+CURLINFO_CONTENT_LENGTH_UPLOAD - 上传内容大小的说明
+CURLINFO_CONTENT_TYPE - 下载内容的Content-Type:值，NULL表示服务器没有发送有效的Content-Type: header
+
+
+
+直接用file_get_contents("php://input");
+<?php
+// 以POST方式
+$data = array ('foo' => 'bar');
+$data = http_build_query($data);
+ 
+$opts = array (
+'http' => array (
+'method' => ‘POST',
+'header'=> 'Content-type: application/x-www-form-urlencodedrn' .
+"Content-Length:" . strlen($data) . "rn",
+'content' => $data
+)
+);
+ 
+$context = stream_context_create($opts);
+$html = file_get_contents(‘https://www.baidu.com', false, $context);
+ 
+echo $html;
+
+// 以GET方式
+$url='http://www.baidu.com/';
+$html = file_get_contents($url);
+echo $html;
+?>
+
+
+//判断传入的字符是否是utf-8
+ function is_utf8($word){
+  if (preg_match("/^([".chr(228)."-".chr(233)."]{1}[".chr(128)."-".chr(191)."]{1}[".chr(128)."-".chr(191)."]{1}){1}/",$word) == true || preg_match("/([".chr(228)."-".chr(233)."]{1}[".chr(128)."-".chr(191)."]{1}[".chr(128)."-".chr(191)."]{1}){1}$/",$word) == true || preg_match("/([".chr(228)."-".chr(233)."]{1}[".chr(128)."-".chr(191)."]{1}[".chr(128)."-".chr(191)."]{1}){2,}/",$word) == true){
+  return true;
+  }else{
+  return false;
+  }
+  }
+
+
+
+标记	用途	描述
+@abstract	 	抽象类的变量和方法
+@access	public, private or protected	文档的访问、使用权限. @access private 表明这个文档是被保护的。
+@author	张三 <zhangsan@163.com>	文档作者
+@copyright	名称 时间	文档版权信息
+@deprecated	version	文档中被废除的方法
+@deprec	 	同 @deprecated
+@example	/path/to/example	文档的外部保存的示例文件的位置。
+@exception	 	文档中方法抛出的异常，也可参照 @throws.
+@global	类型：$globalvarname	文档中的全局变量及有关的方法和函数
+@ignore	 	忽略文档中指定的关键字
+@internal	 	开发团队内部信息
+@link	URL	类似于license 但还可以通过link找到文档中的更多个详细的信息
+@name	变量别名	为某个变量指定别名
+@magic	 	phpdoc.de compatibility
+@package	封装包的名称	一组相关类、函数封装的包名称
+@param	如 [$username] 用户名	变量含义注释
+@return	如 返回bool	函数返回结果描述，一般不用在void（空返回结果的）的函数中
+@see	如 Class Login（）	文件关联的任何元素（全局变量，包括，页面，类，函数，定义，方法，变量）。
+@since	version	记录什么时候对文档的哪些部分进行了更改
+@static	 	记录静态类、方法
+@staticvar	 	在类、函数中使用的静态变量
+@subpackage	 	子版本
+@throws	 	某一方法抛出的异常
+@todo	 	表示文件未完成或者要完善的地方
+@var	type	文档中的变量及其类型
+@version	 	文档、类、函数的版本信息
+
+
+$GLOBALS['HTTP_RAW_POST_DATA']
+
+最近在做Flash在线裁剪图片 生成图片的东西。
+通过Flash POST 图片的二进制数据给php，由php生成图片保存。
+
+开始想到用$_POST来接受。后来发现行不通。
+查阅了很多资料 明白了所以然，这里做一个笔记：
+
+于PHP默认只识别application/x-www.form-urlencoded标准的数据类型。
+因此，对型如text/xml 或者 soap 或者 application/octet-stream 之类的内容无法解析，如果用$_POST数组来接收就会失败！
+故保留原型，交给$GLOBALS['HTTP_RAW_POST_DATA'] 来接收。
+
+另外还有一项 php://input 也可以实现此这个功能
+
+php://input 允许读取 POST 的原始数据。和 $HTTP_RAW_POST_DATA 比起来，它给内存带来的压力较小，并且不需要任何特殊的 php.ini 设置。php://input和 $HTTP_RAW_POST_DATA 不能用于 enctype="multipart/form-data"。
+
+我在Flash中使用JPGEncoder把BitMapData转成二进制，然后post给php
+
+php页面代码如下：
+
+<?php
+$filename="teststream.jpg";//要生成的图片名字
+
+$xmlstr =  $GLOBALS[HTTP_RAW_POST_DATA];
+if(empty($xmlstr)) $xmlstr = file_get_contents('php://input');
+
+$jpg = $xmlstr;//得到post过来的二进制原始数据
+$file = fopen("cache/pic/".$filename,"w");//打开文件准备写入
+fwrite($file,$jpg);//写入
+fclose($file);//关闭
+
+?>
